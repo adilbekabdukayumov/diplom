@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from database import Base, engine
 from api.user_api import user_router
-from api.product_api import product_rout
-from routers import products, categories, cart
+from routers import products
+from routers import categories, cart
 
 app = FastAPI(docs_url="/")
 
