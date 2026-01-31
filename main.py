@@ -2,11 +2,15 @@ from fastapi import FastAPI
 from database import Base, engine
 from api.user_api import user_router
 from api.product_api import product_rout
+from routers import products, categories, cart
 
 app = FastAPI(docs_url="/")
 
 Base.metadata.create_all(engine)
 
 app.include_router(user_router)
-app.include_router(product_rout)
+app.include_router(products.router)
+app.include_router(categories.router)
+app.include_router(cart.router)
+
 

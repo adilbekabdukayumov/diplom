@@ -11,11 +11,32 @@ class User(Base):
 
 class Product(Base):
     __tablename__ = "products"
-    id = Column(Integer, primary_key=True,autoincrement=True)
-    pr_name = Column(String, nullable=False)
-    pr_description = Column(Text, nullable=False)
-    pr_price = Column(Integer, nullable=False)
-    pr_quantity = Column(Integer, nullable=False)
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(255), nullable=False)
+    description = Column(Text)
+    price = Column(Integer, nullable=False)
+    quantity = Column(Integer, nullable=False)
+    brand = Column(String(100))
+    size = Column(String(50))
+    category_id = Column(Integer, ForeignKey("categories.id"))
+
+
+class Category(Base):
+    __tablename__ = "categories"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(100), nullable=False, unique=True)
+    products = relationship("Product", backref="category")
+
+
+class Cart(Base):
+    __tablename__ = "cart"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    product_id = Column(Integer, ForeignKey("products.id"))
+    quantity = Column(Integer, nullable=False)
+    user = relationship("User")
+    product = relationship("Product")
 
 
 
