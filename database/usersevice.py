@@ -1,6 +1,7 @@
 from database.models import User
 from database import get_db
-from schemas import UserSchema
+from schemas import UserCreate, UserRead
+
 
 def get_all_or_exact_user(uid=0):
     db = next(get_db())
@@ -21,7 +22,7 @@ def get_user_by_username_db(username):
     return False
 
 
-def create_user_db(user: UserSchema):
+def create_user_db(user: UserCreate):
     db = next(get_db())
     user_data = user.model_dump()
     new_user = User(**user_data)

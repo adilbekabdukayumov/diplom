@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from database import SessionLocal
-from models import Cart
+from database.models import Cart
 from schemas import CartCreate
 
 router = APIRouter(prefix="/cart", tags=["Cart"])

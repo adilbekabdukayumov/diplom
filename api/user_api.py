@@ -1,4 +1,11 @@
 from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from database import SessionLocal
+from database.usersevice import *
+from schemas import UserCreate, UserRead  # <- өзгерді
+
+router = APIRouter(prefix="/users", tags=["Users"])
 
 from database.usersevice import *
 
@@ -14,7 +21,7 @@ async def get_all_or_exact_user_api(uid: int):
 
 
 @user_router.post("/create_user")
-async def create_user_api(user: UserSchema):
+async def create_user_api(user: UserCreate):
     result = create_user_db(user)
     if result:
         return {"status": True, "message": result}

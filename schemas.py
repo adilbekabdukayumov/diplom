@@ -1,45 +1,63 @@
 from pydantic import BaseModel
-from typing import Optional
+from pydantic import BaseModel
 
-
-class UserSchema(BaseModel):
+# ===== User schemas =====
+class UserCreate(BaseModel):
     username: str
     password: str
 
-class ProductSchema(BaseModel):
+class UserRead(BaseModel):
+    id: int
+    username: str
+
+    class Config:
+        orm_mode = True
+
+
+# ===== User schemas =====
+class UserCreate(BaseModel):
+    username: str
+    password: str
+
+class UserRead(BaseModel):
+    id: int
+    username: str
+
+    class Config:
+        orm_mode = True
+
+# ===== Product schemas =====
+class ProductCreate(BaseModel):
     pr_name: str
     pr_description: str
+    pr_price: int
     pr_quantity: int
-    pr_price: float
 
-class CategoryBase(BaseModel):
-    name: str
 
-class CategoryCreate(CategoryBase):
-    pass
-
-class Category(CategoryBase):
+class ProductRead(ProductCreate):
     id: int
 
     class Config:
         orm_mode = True
 
-class CartBase(BaseModel):
+# ===== Category schemas =====
+class CategoryCreate(BaseModel):
+    name: str
+
+class CategoryRead(CategoryCreate):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+# ===== Cart schemas =====
+class CartCreate(BaseModel):
     product_id: int
     quantity: int
 
-class CartCreate(CartBase):
-    pass
-
-class Cart(CartBase):
+class CartRead(CartCreate):
     id: int
     user_id: int
 
     class Config:
         orm_mode = True
-
-
-
-
-
-

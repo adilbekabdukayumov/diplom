@@ -1,35 +1,26 @@
-from fastapi import FastAPI, APIRouter
-from database.productservice import *
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from database import SessionLocal
+from database.models import Product
+from schemas import ProductCreate
 
-product_rout = APIRouter(prefix='/products', tags=['products'])
+router = APIRouter(prefix="/products", tags=["Products"])
 
-@product_rout.post('/product')
-def create_prod(post: ProductSchema):
-    result = create_product(post)
-    if result:
-        return {"status": True, "message": result}
-    return {"status": False, "message": result}
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-@product_rout.get('/product')
-def all_list_products():
-    result = get_all_product()
-    if result:
-        return {"status": True, "message": result}
-    return {"status": False, "message": result}
+@router.post("/")
+def create_product(product: ProductCreate, db: Session = Depends(get_db)):
+    db_product = Product(**product.dict())
+    db.add(db_product)
+    db.commit()
+    db.refresh(db_product)
+    return db_product
 
-@product_rout.delete('/product')
-def delete_prod(product: ProductSchema):
-    result = delete_product(product)
-    if result:
-        return {"status": True, "message": result}
-    return {"status": False, "message": result}
-
-@product_rout.get('/product/<id>')
-def get_product(id: int):
-    result = get_exact_product(id)
-    if result:
-        return {"status": True, "message": result}
-    return {"status": False, "message": result}
-
-
-
+@router.get("/")
+def get_products(db: Session = Depends(get_db)):
+    return db.query(Product).all()

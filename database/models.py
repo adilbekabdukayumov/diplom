@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, ForeignKey
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -13,20 +13,22 @@ class Product(Base):
     __tablename__ = "products"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(255), nullable=False)
-    description = Column(Text)
-    price = Column(Integer, nullable=False)
-    quantity = Column(Integer, nullable=False)
-    brand = Column(String(100))
-    size = Column(String(50))
-    category_id = Column(Integer, ForeignKey("categories.id"))
+    pr_name = Column(String, nullable=False)
+    pr_description = Column(Text, nullable=False)
+    pr_price = Column(Integer, nullable=False)
+    pr_quantity = Column(Integer, nullable=False)
+
+    category_id = Column(Integer, ForeignKey("categories.id"))  # 🔥 МІНЕ ОСЫ
+    category = relationship("Category", back_populates="products")
+
 
 
 class Category(Base):
     __tablename__ = "categories"
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(100), nullable=False, unique=True)
-    products = relationship("Product", backref="category")
+    name = Column(String, unique=True, nullable=False)
+
+    products = relationship("Product", back_populates="category")
 
 
 class Cart(Base):
